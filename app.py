@@ -1,7 +1,9 @@
+import os
 from flask import Flask, render_template, request, session, redirect, url_for
 import datetime
 import pymysql
 import random
+import sqlite3
 
 app = Flask(__name__)
 app.secret_key = 'language_learning_key_2026'
@@ -292,9 +294,6 @@ def certificate():
 
 @app.route('/first_week')
 def first_week():
-    # Marrim gjuhët që ka zgjedhur përdoruesi te Index
-    my_lang = session.get('my_lang', 'sq')  # Gjuha amtare
-    learn_lang = session.get('learn_lang', 'en')  # Gjuha që po mëson
 
     # Struktura me tri gjuhët
     data = {
@@ -514,7 +513,7 @@ def first_week():
             {"sq": "Brokoli", "en": "Broccoli", "de": "Brokkoli", "emoji": "🥦"}
         ]
     }
-    return render_template('first_week.html', categories=data, gjuha=gjuha_target)
+    return render_template('first_week.html', categories=data)
 
 @app.route('/second_week')
 def second_week():
@@ -668,4 +667,5 @@ def exam(exam_id):
 
 if __name__ == '__main__':
     setup_database()
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
