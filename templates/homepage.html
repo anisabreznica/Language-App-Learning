@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage - Modern Learning</title>
+    <style>
+        :root {
+            --primary: #4b00ff;
+            --primary-glow: rgba(75, 0, 255, 0.3);
+            --glass: rgba(255, 255, 255, 0.95);
+            --text-dark: #0f172a;
+            --radius: 25px;
+        }
+
+        /* SFONDI DHE TRUPI */
+        body.body-homepage {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'SF Pro Display', -apple-system, sans-serif;
+            background-color: #0f172a;
+            background-image: 
+                radial-gradient(at 0% 0%, #1e293b 0px, transparent 50%),
+                radial-gradient(at 100% 0%, #4b00ff22 0px, transparent 50%),
+                radial-gradient(at 50% 100%, #00d4ff11 0px, transparent 50%);
+            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+        }
+
+        /* HEADER */
+        .header {
+            width: 90%;
+            max-width: 1100px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 40px 0 20px 0;
+        }
+
+        .skills-title { font-size: 2.2rem; font-weight: 900; letter-spacing: -1.5px; }
+
+        /* MENU ICON */
+        .menu-icon {
+            background: var(--primary);
+            padding: 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px var(--primary-glow);
+            transition: 0.3s;
+        }
+        .menu-line { width: 25px; height: 3px; background: white; margin: 4px 0; border-radius: 2px; }
+
+        /* PROGRESS BAR (Këtu ishte problemi) */
+        .progress-section {
+            background: var(--glass);
+            width: 90%;
+            max-width: 1100px;
+            padding: 35px;
+            border-radius: var(--radius);
+            color: var(--text-dark);
+            margin: 20px 0 40px 0;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .percentage-text {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .main-line-border {
+            background: #e2e8f0; /* Ngjyra e vijës bosh */
+            height: 16px;
+            border-radius: 20px;
+            width: 100%;
+            overflow: hidden; /* Që vija e mbushur mos të dalë jashtë qosheve */
+            margin: 15px 0;
+        }
+
+        .fill-progress {
+            background: linear-gradient(90deg, var(--primary), #00d4ff);
+            height: 100%;
+            border-radius: 20px;
+            transition: width 1.5s cubic-bezier(0.1, 0.42, 0.41, 1); /* Animacion i lëmuar */
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .stat-item span { font-size: 1.4rem; font-weight: 800; display: block; }
+        .stat-item p { margin: 5px 0; opacity: 0.7; font-size: 0.9rem; font-weight: 600; }
+
+        /* MODAL (SETTINGS) */
+        .modal {
+            display: none; 
+            position: fixed;
+            z-index: 9999;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.85);
+            backdrop-filter: blur(12px);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 10% auto;
+            padding: 40px;
+            border-radius: 30px;
+            width: 85%;
+            max-width: 400px;
+            color: var(--text-dark);
+            text-align: center;
+            position: relative;
+        }
+
+        .select-group { margin-bottom: 25px; text-align: left; }
+        .select-group label { display: block; margin-bottom: 10px; font-weight: 700; font-size: 0.9rem; }
+        
+        select {
+            width: 100%; padding: 15px; border-radius: 15px; border: 2px solid #f0f0f0;
+            font-size: 1rem; font-weight: 600; outline: none; background: #fafafa;
+        }
+
+        .save-change-btn {
+            width: 100%; padding: 18px; background: var(--primary); color: white;
+            border: none; border-radius: 18px; font-size: 1.1rem; font-weight: 800; cursor: pointer;
+        }
+
+        /* GRIDS */
+        .main-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px; width: 90%; max-width: 1100px; margin-bottom: 30px;
+        }
+
+        .big-box {
+            background: var(--glass); padding: 50px 20px; border-radius: var(--radius);
+            text-decoration: none; color: var(--text-dark); text-align: center;
+            font-weight: 800; font-size: 1.5rem; transition: 0.3s;
+        }
+        .big-box:hover { transform: translateY(-10px); background: var(--primary); color: white; }
+
+        .exams-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px; width: 90%; max-width: 1100px; padding-bottom: 60px;
+        }
+
+        .exam-rect {
+            background: white; padding: 25px; border-radius: 20px;
+            color: var(--text-dark); font-weight: 700; text-align: center; cursor: pointer;
+        }
+
+        @media (max-width: 800px) {
+            .main-grid { grid-template-columns: 1fr; }
+            .stats-row { flex-direction: column; gap: 20px; }
+        }
+
+        .main-line-border {
+    background: rgba(0, 0, 0, 0.1);
+    height: 16px;
+    border-radius: 20px;
+    width: 100%;
+    margin: 15px 0;
+    overflow: hidden; /* Ky është kyç që vija mos të dalë jashtë */
+}
+
+.fill-progress {
+    background: linear-gradient(90deg, #4b00ff, #00d4ff);
+    height: 100%;
+    border-radius: 20px;
+    width: 0%; /* Fillon nga 0 */
+    transition: width 1.5s cubic-bezier(0.1, 0.42, 0.41, 1); /* Animacion profesional */
+    box-shadow: 0 0 15px rgba(75, 0, 255, 0.3);
+}
+
+.cert-card {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid gold;
+    border-radius: 30px;
+    padding: 40px;
+    max-width: 500px;
+    margin: 0 auto;
+    box-shadow: 0 0 30px rgba(218, 165, 32, 0.3);
+    backdrop-filter: blur(15px);
+}
+.btn-cert {
+    background: linear-gradient(45deg, #ffd700, #b8860b);
+    color: black;
+    border: none;
+    padding: 15px 40px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 15px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.logout-btn-modal {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    background: #fff;
+    color: #e74c3c;
+    border: 2px solid #e74c3c;
+    border-radius: 18px;
+    font-size: 1rem;
+    font-weight: 800;
+    text-decoration: none;
+    box-sizing: border-box;
+    transition: 0.3s;
+}
+
+.logout-btn-modal:hover {
+    background: #e74c3c;
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+}
+    </style>
+</head>
+<body class="body-homepage">
+
+    <div class="header">
+        <div class="skills-title">
+            {% if session['my_lang'] == 'sq' %} Shkathtësitë 
+            {% elif session['my_lang'] == 'de' %} Fähigkeiten 
+            {% else %} Skills {% endif %}
+        </div>
+        
+        <div class="menu-icon" onclick="openModal()">
+            <div class="menu-line"></div>
+            <div class="menu-line"></div>
+            <div class="menu-line"></div>
+        </div>
+    </div>
+
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <span onclick="closeModal()" style="position:absolute; top:20px; right:25px; cursor:pointer; font-size:30px;">&times;</span>
+            <h2 style="font-weight:900;">Cilësimet</h2>
+            <form action="/set_language" method="POST">
+                <div class="select-group">
+                    <label>Gjuha ime:</label>
+                    <select name="my_lang">
+                        <option value="sq" {% if session['my_lang'] == 'sq' %}selected{% endif %}>Albanian</option>
+                        <option value="en" {% if session['my_lang'] == 'en' %}selected{% endif %}>English</option>
+                        <option value="de" {% if session['my_lang'] == 'de' %}selected{% endif %}>German</option>
+                    </select>
+                </div>
+                <div class="select-group">
+                    <label>Mëso:</label>
+                    <select name="learn_lang">
+                        <option value="en" {% if session['learn_lang'] == 'en' %}selected{% endif %}>English</option>
+                        <option value="de" {% if session['learn_lang'] == 'de' %}selected{% endif %}>German</option>
+                        <option value="sq" {% if session['learn_lang'] == 'sq' %}selected{% endif %}>Albanian</option>
+                    </select>
+                </div>
+                <button type="submit" class="save-change-btn">RUAJ NDRYSHIMET</button>
+            </form>
+
+            <hr style="margin: 25px 0; border: 0; border-top: 1px solid #eee;">
+            <a href="{{ url_for('logout') }}" class="logout-btn-modal">🚪 LOG OUT</a>
+        </div>
+    </div>
+
+    <div class="progress-section">
+    <div class="percentage-text" id="perc-text">{{ total_percent }}%</div> 
+    
+    <div class="main-line-border">
+        <div id="progress-fill" class="fill-progress" style="width: {{ total_percent }}%;"></div>
+    </div>
+
+    <div class="stats-row">
+        <div class="stat-item">
+            <span>{{ exams_finished }} / 3</span>
+            <p>
+                {% if session['my_lang'] == 'sq' %} Përfunduar 
+                {% elif session['my_lang'] == 'de' %} Abgeschlossen 
+                {% else %} Finished {% endif %}
+            </p>
+        </div>
+        <div class="stat-item">
+            <span style="color: #2ecc71;">{{ p_passed }}%</span>
+            <p>
+                {% if session['my_lang'] == 'sq' %} Kaluar 
+                {% elif session['my_lang'] == 'de' %} Bestanden 
+                {% else %} Passed {% endif %}
+            </p>
+        </div>
+        <div class="stat-item">
+            <span style="color: #e74c3c;">{{ p_failed }}%</span>
+            <p>
+                {% if session['my_lang'] == 'sq' %} Dështuar 
+                {% elif session['my_lang'] == 'de' %} Nicht bestanden 
+                {% else %} Failed {% endif %}
+            </p>
+        </div>
+    </div>
+</div>
+
+    <div class="main-grid">
+        <a href="/first_week" class="big-box">
+            {% if session['my_lang'] == 'sq' %} Java e Parë {% elif session['my_lang'] == 'de' %} Erste Woche {% else %} First Week {% endif %}
+        </a>
+        <a href="/second_week" class="big-box">
+            {% if session['my_lang'] == 'sq' %} Java e Dytë {% elif session['my_lang'] == 'de' %} Zweite Woche {% else %} Second Week {% endif %}
+        </a>
+        <a href="/third_week" class="big-box">
+            {% if session['my_lang'] == 'sq' %} Java e Tretë {% elif session['my_lang'] == 'de' %} Dritte Woche {% else %} Third Week {% endif %}
+        </a>
+    </div>
+
+    <div class="exams-grid">
+    {% for i in ['1', '2', '3'] %}
+        {% if unlocked[i] %}
+            <div class="exam-rect" onclick="location.href='/exam/{{i}}'">
+                {% if session['my_lang'] == 'sq' %} PROVIMI 
+                {% elif session['my_lang'] == 'de' %} PRÜFUNG 
+                {% else %} EXAM {% endif %} {{i}} 
+
+                {% if session.get('scores', {}).get(i) %} 
+                    <br><small>
+                        {% if session['my_lang'] == 'sq' %} Pikët: 
+                        {% elif session['my_lang'] == 'de' %} Punkte: 
+                        {% else %} Score: {% endif %} {{session['scores'][i]}}
+                    </small>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="exam-rect" style="background: rgba(255,255,255,0.1); color: #888; cursor: not-allowed; border: 1px dashed #444;">
+                {% if session['my_lang'] == 'sq' %} PROVIMI 
+                {% elif session['my_lang'] == 'de' %} PRÜFUNG 
+                {% else %} EXAM {% endif %} {{i}} 🔒 <br>
+                
+                <small>
+                    {% if session['my_lang'] == 'sq' %} Kalo testin {{ i|int - 1 }}
+                    {% elif session['my_lang'] == 'de' %} Bestehe test {{ i|int - 1 }}
+                    {% else %} Pass test {{ i|int - 1 }} {% endif %}
+                </small>
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
+    <div id="certificate-section" style="display: none; text-align: center; margin: 50px auto; padding-bottom: 50px;">
+    <div class="cert-card">
+        <div class="cert-icon">🎓</div>
+        <h3>Urime! Kursi u përfundua</h3>
+        <p>Ti ke arritur {{total_percent}}% të progresit. Certifikata jote është gati!</p>
+        <button onclick="location.href='/certificate'" class="btn-cert">
+            MERR CERTIFIKATËN
+        </button>
+    </div>
+</div>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Marrim vlerën nga Python (Sigurohu që total_percent vjen si numër)
+        let total = parseInt("{{ total_percent }}") || 0;
+        
+        console.log("Progresi aktual: " + total + "%"); // Kjo të ndihmon me pa te Console nëse është 100
+
+        const bar = document.getElementById("progress-fill");
+        const certSection = document.getElementById("certificate-section");
+
+        // 1. Mbushim vijën
+        setTimeout(() => {
+            if(bar) bar.style.width = total + "%";
+            
+            // 2. KONTROLLI I FORCËSUAR
+            // Nëse totali është 100 ose më shumë, shfaqe butonin pa tjetër
+            if (total >= 100) {
+                certSection.style.display = "block";
+                console.log("Butoni i certifikatës u aktivizua!");
+            }
+        }, 600);
+    });
+
+        function openModal() {
+            document.getElementById("settingsModal").style.display = "block";
+        }
+        function closeModal() {
+            document.getElementById("settingsModal").style.display = "none";
+        }
+        window.onclick = function(event) {
+            let modal = document.getElementById("settingsModal");
+            if (event.target == modal) closeModal();
+        }
+    </script>
+</body>
+</html>

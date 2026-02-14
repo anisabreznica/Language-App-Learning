@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certifikimi Final - Dashboard</title>
+    <style>
+        :root {
+            --primary: #4b00ff;
+            --secondary: #00d4ff;
+            --glass: rgba(255, 255, 255, 0.95);
+            --dark-bg: #0f172a;
+            --radius: 24px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--dark-bg);
+            /* Sfondi i njëjtë me Homepage për koherencë */
+            background-image: radial-gradient(at 0% 0%, #1e293b 0px, transparent 50%), 
+                              radial-gradient(at 100% 100%, #1e1b4b 0px, transparent 50%);
+            color: white;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: var(--radius);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            text-align: center;
+            animation: fadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #ffd700, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .score-box {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            padding: 20px;
+            border-radius: 18px;
+            margin-bottom: 30px;
+        }
+
+        .score-box strong {
+            color: #ffd700;
+            font-size: 2.2rem;
+            display: block;
+            margin-top: 5px;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .input-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 8px;
+            margin-left: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px 18px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            font-size: 1rem;
+            color: white;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: var(--secondary);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.15);
+        }
+
+        .date-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .date-group {
+            flex: 1;
+        }
+
+        /* Rregullim për ikonën e kalendarit në inpute */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            cursor: pointer;
+        }
+
+        button {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 18px;
+            width: 100%;
+            border: none;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            box-shadow: 0 10px 20px rgba(75, 0, 255, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(75, 0, 255, 0.4);
+            filter: brightness(1.1);
+        }
+
+        button:active {
+            transform: translateY(-1px);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 25px;
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .back-link:hover {
+            color: white;
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+            .date-row {
+                flex-direction: column;
+                gap: 20px;
+            }
+            h2 { font-size: 1.6rem; }
+            .score-box strong { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Certifikimi Final 🎓</h2>
+        
+        <div class="score-box">
+            <p style="margin: 0; font-weight: 600; color: rgba(255,255,255,0.7);">Rezultati juaj:</p>
+            <strong>{{ percent }}%</strong>
+        </div>
+
+        <form action="/certificate" method="POST">
+            <div class="input-group">
+                <label>Emri</label>
+                <input type="text" name="emri" placeholder="Shkruaj emrin" required>
+            </div>
+
+            <div class="input-group">
+                <label>Mbiemri</label>
+                <input type="text" name="mbiemri" placeholder="Shkruaj mbiemrin" required>
+            </div>
+
+            <div class="date-row">
+                <div class="date-group">
+                    <label>Data e Lindjes</label>
+                    <input type="date" name="datelindja" required>
+                </div>
+                <div class="date-group">
+                    <label>Data Sot</label>
+                    <input type="date" name="data_sot" required>
+                </div>
+            </div>
+
+            <button type="submit">GJENERO CERTIFIKATËN</button>
+        </form>
+
+        <a href="/homepage" class="back-link">← Kthehu te Dashboard</a>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regjistrimi - Language Learning</title>
+    <style>
+        :root {
+            --primary: #4facfe;
+            --secondary: #00f2fe;
+            --glass: rgba(255, 255, 255, 0.1);
+            --text-color: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0f172a;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(79, 172, 254, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(0, 242, 254, 0.15) 0px, transparent 50%);
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Dekori ne sfond */
+        .bg-circle {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.2;
+            z-index: -1;
+        }
+        .circle-1 { top: -100px; right: -100px; }
+        .circle-2 { bottom: -100px; left: -100px; }
+
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 450px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            animation: fadeIn 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--text-color);
+            margin-bottom: 8px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        p.subtitle {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 6px;
+            margin-left: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            font-size: 0.95rem;
+            color: white;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 0 4px rgba(79, 172, 254, 0.15);
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: #0f172a;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(79, 172, 254, 0.2);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px rgba(79, 172, 254, 0.3);
+            filter: brightness(1.1);
+        }
+
+        /* Mesazhet e gabimit (Error/Flashed) */
+        .error-list {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        .error-item {
+            background: rgba(255, 71, 87, 0.1);
+            color: #ff4757;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(255, 71, 87, 0.2);
+            font-weight: 500;
+        }
+
+        .footer-links {
+            margin-top: 25px;
+            font-size: 0.9rem;
+        }
+
+        .footer-links span {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--secondary);
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        a:hover {
+            color: var(--primary);
+            text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+            h2 { font-size: 1.7rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-circle circle-1"></div>
+    <div class="bg-circle circle-2"></div>
+
+    <div class="container">
+        <h2>Krijo Llogari ✨</h2>
+        <p class="subtitle">Bashkohu me mijëra nxënës sot</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <ul class="error-list">
+              {% for category, message in messages %}
+                <li class="error-item">{{ message }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('register') }}">
+            <div class="input-group">
+                <label>Përdoruesi</label>
+                <input type="text" name="username" placeholder="p.sh. filan_fisteku" required>
+            </div>
+
+            <div class="input-group">
+                <label>Email Adresa</label>
+                <input type="email" name="email" placeholder="email@shembull.com" required>
+            </div>
+
+            <div class="input-group">
+                <label>Fjalëkalimi</label>
+                <input type="password" name="password" placeholder="••••••••" required>
+            </div>
+
+            <div class="input-group">
+                <label>Konfirmo Fjalëkalimin</label>
+                <input type="password" name="confirm_password" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit">Krijo Llogarinë</button>
+        </form>
+
+        <div class="footer-links">
+            <span>Keni një llogari?</span> 
+            <a href="{{ url_for('login') }}">Kyçu këtu</a>
+        </div>
+    </div>
+
+</body>
+</html>

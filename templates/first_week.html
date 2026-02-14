@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java e Parë - Modern Learning</title>
+<style>
+:root {
+    --primary: #0062ff;        
+    --primary-glow: rgba(0, 98, 255, 0.4);
+    --text-dark: #0f172a;      
+    --radius: 35px;            
+    --glass: rgba(255, 255, 255, 0.82); 
+}
+
+body {
+    font-family: 'SF Pro Display', -apple-system, system-ui, sans-serif;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    color: var(--text-dark);
+    
+    /* BACKGROUNDI SUPER PROFESIONAL: Mesh Gradient */
+    background-color: #0f172a;
+    background-image: 
+        radial-gradient(at 0% 0%, #1e293b 0px, transparent 50%),
+        radial-gradient(at 100% 0%, #002d72 0px, transparent 50%),
+        radial-gradient(at 100% 100%, #1e1b4b 0px, transparent 50%),
+        radial-gradient(at 0% 100%, #004085 0px, transparent 50%),
+        radial-gradient(at 50% 50%, #0f172a 0px, transparent 50%);
+    background-attachment: fixed;
+}
+
+.container {
+    width: 98%;
+    max-width: 1700px;
+}
+
+.header {
+    text-align: center;
+    padding: 70px 0 50px;
+}
+
+.header h1 {
+    font-size: 3.8rem;
+    font-weight: 900;
+    letter-spacing: -3px;
+    margin: 0;
+    background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+}
+
+/* --- BACK BUTTONS --- */
+.back-btn {
+    position: fixed;
+    top: 30px;
+    left: 30px;
+    z-index: 1000;
+    background: var(--glass) !important;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    padding: 12px 25px !important;
+    border-radius: 20px !important;
+    color: var(--text-dark) !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2) !important;
+    transition: all 0.3s ease !important;
+    font-size: 1rem !important;
+}
+
+.back-btn:hover {
+    background: var(--primary) !important;
+    color: white !important;
+    transform: translateX(5px);
+    box-shadow: 0 15px 30px var(--primary-glow) !important;
+}
+
+/* --- GRIDI I KATEGORIVE (3 në rresht) --- */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 40px;
+    padding: 20px 0;
+}
+
+.box {
+    background: var(--glass) !important;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    min-height: 350px;
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius) !important;
+    cursor: pointer;
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12) !important;
+    font-size: 2.2rem !important;
+    font-weight: 900 !important;
+    color: var(--text-dark) !important;
+    padding: 50px !important;
+    box-sizing: border-box;
+}
+
+.box:hover {
+    transform: translateY(-20px) scale(1.03);
+    background: var(--primary) !important;
+    color: white !important;
+    box-shadow: 0 40px 100px var(--primary-glow) !important;
+}
+
+/* --- LISTA E FJALËVE (2 kolona) --- */
+#list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+}
+
+.card {
+    background: var(--glass) !important;
+    backdrop-filter: blur(15px);
+    padding: 45px 60px !important;
+    border-radius: var(--radius) !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
+    transition: 0.4s ease;
+}
+
+.word-info b {
+    font-size: 2rem;
+    font-weight: 900;
+}
+
+.speak-btn {
+    background: var(--primary) !important;
+    color: white !important;
+    border: none !important;
+    width: 85px !important;
+    height: 85px !important;
+    border-radius: 50%;
+    cursor: pointer !important;
+    font-size: 35px !important;
+    box-shadow: 0 15px 30px var(--primary-glow) !important;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 1300px) {
+    .grid { grid-template-columns: repeat(2, 1fr); }
+    .header h1 { font-size: 3rem; }
+}
+
+@media (max-width: 850px) {
+    .grid { grid-template-columns: 1fr; }
+    .box { min-height: 220px; font-size: 1.8rem !important; }
+    #list { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body class="first_week">
+
+    <a href="/homepage" id="home-btn" class="back-btn">← Kthehu te Fillimi</a>
+
+    <div class="container">
+        <div id="menu">
+            <div class="header">
+                <h1>Java e Parë (Woche 1)</h1>
+            </div>
+            <div class="grid">
+                <div class="box" onclick="show('Alfabeti')">Alfabeti</div>
+                <div class="box" onclick="show('Numrat')">Numrat</div>
+                <div class="box" onclick="show('Ngjyrat')">Ngjyrat</div>
+                <div class="box" onclick="show('Kafshët')">Kafshët</div>
+                <div class="box" onclick="show('Frutat')">Frutat</div>
+                <div class="box" onclick="show('Perimet')">Perimet</div>
+            </div>
+        </div>
+
+        <div id="details" style="display:none;">
+            <button class="back-btn" onclick="goBack()">← Mbrapa te Kategoritë</button>
+            <div class="header">
+                <h2 id="title" style="font-size: 3.5rem; color: white; margin-top: 40px;"></h2>
+            </div>
+            <div id="list"></div>
+        </div>
+    </div>
+
+    <script>
+        const data = {
+             'Alfabeti': [
+
+    {sq: 'A', en: 'A', de: 'A'},
+    {sq: 'B', en: 'B', de: 'B'},
+    {sq: 'C', en: 'C', de: 'C'},    
+    {sq: 'Ç', en: '-', de: '-'},
+    {sq: 'D', en: 'D', de: 'D'},
+    {sq: 'DH', en: '-', de: '-'},
+    {sq: 'E', en: 'E', de: 'E'},
+    {sq: 'Ë', en: '-', de: '-'},
+    {sq: 'F', en: 'F', de: 'F'},
+    {sq: 'G', en: 'G', de: 'G'},
+    {sq: 'GJ', en: '-', de: '-'},
+    {sq: 'H', en: 'H', de: 'H'},
+    {sq: 'I', en: 'I', de: 'I'},
+    {sq: 'J', en: 'J', de: 'J'},
+    {sq: 'K', en: 'K', de: 'K'},
+    {sq: 'L', en: 'L', de: 'L'},
+    {sq: 'LL', en: '-', de: '-'},
+    {sq: 'M', en: 'M', de: 'M'},
+    {sq: 'N', en: 'N', de: 'N'},
+    {sq: 'NJ', en: '-', de: '-'},
+    {sq: 'O', en: 'O', de: 'O'},
+    {sq: 'P', en: 'P', de: 'P'},
+    {sq: 'Q', en: 'Q', de: 'Q'},
+    {sq: 'R', en: 'R', de: 'R'},
+    {sq: 'RR', en: '-', de: '-'},
+    {sq: 'S', en: 'S', de: 'S'},
+    {sq: 'SH', en: '-', de: '-'},
+    {sq: 'T', en: 'T', de: 'T'},
+    {sq: 'TH', en: '-', de: '-'},
+    {sq: 'U', en: 'U', de: 'U'},
+    {sq: 'V', en: 'V', de: 'V'},
+    {sq: 'X', en: 'X', de: 'X'},
+    {sq: 'XH', en: '-', de: '-'},
+    {sq: 'Y', en: 'Y', de: 'Y'},
+    {sq: 'Z', en: 'Z', de: 'Z'},
+    {sq: 'ZH', en: '-', de: '-'},
+    {sq: '-', en: '-', de: 'Ä'},
+    {sq: '-', en: '-', de: 'Ö'},
+    {sq: '-', en: '-', de: 'Ü'},
+    {sq: '-', en: '-', de: 'ß'}
+],
+
+             'Numrat': [
+
+    {sq: '1 - Një', en: 'One', de: 'Eins'},
+
+    {sq: '2 - Dy', en: 'Two', de: 'Zwei'},
+
+    {sq: '3 - Tre', en: 'Three', de: 'Drei'},
+
+    {sq: '4 - Katër', en: 'Four', de: 'Vier'},
+
+    {sq: '5 - Pesë', en: 'Five', de: 'Fünf'},
+
+    {sq: '6 - Gjashtë', en: 'Six', de: 'Sechs'},
+
+    {sq: '7 - Shtatë', en: 'Seven', de: 'Sieben'},
+
+    {sq: '8 - Tetë', en: 'Eight', de: 'Acht'},
+
+    {sq: '9 - Nëntë', en: 'Nine', de: 'Neun'},
+
+    {sq: '10 - Dhjetë', en: 'Ten', de: 'Zehn'},
+
+    {sq: '11 - Njëmbëdhjetë', en: 'Eleven', de: 'Elf'},
+
+    {sq: '12 - Dymbëdhjetë', en: 'Twelve', de: 'Zwölf'},
+
+    {sq: '13 - Trembëdhjetë', en: 'Thirteen', de: 'Dreizehn'},
+
+    {sq: '14 - Katërmbëdhjetë', en: 'Fourteen', de: 'Vierzehn'},
+
+    {sq: '15 - Pesëmbëdhjetë', en: 'Fifteen', de: 'Fünfzehn'},
+
+    {sq: '16 - Gjashtëmbëdhjetë', en: 'Sixteen', de: 'Sechzehn'},
+
+    {sq: '17 - Shtatëmbëdhjetë', en: 'Seventeen', de: 'Siebzehn'},
+
+    {sq: '18 - Tetëmbëdhjetë', en: 'Eighteen', de: 'Achtzehn'},
+
+    {sq: '19 - Nëntëmbëdhjetë', en: 'Nineteen', de: 'Neunzehn'},
+
+    {sq: '20 - Njëzet', en: 'Twenty', de: 'Zwanzig'},
+
+    {sq: '21 - Njëzet e një', en: 'Twenty-one', de: 'Einundzwanzig'},
+
+    {sq: '22 - Njëzet e dy', en: 'Twenty-two', de: 'Zweiundzwanzig'},
+
+    {sq: '23 - Njëzet e tre', en: 'Twenty-three', de: 'Dreiundzwanzig'},
+
+    {sq: '24 - Njëzet e katër', en: 'Twenty-four', de: 'Vierundzwanzig'},
+
+    {sq: '25 - Njëzet e pesë', en: 'Twenty-five', de: 'Fünfundzwanzig'},
+
+    {sq: '26 - Njëzet e gjashtë', en: 'Twenty-six', de: 'Sechsundzwanzig'},
+
+    {sq: '27 - Njëzet e shtatë', en: 'Twenty-seven', de: 'Siebenundzwanzig'},
+
+    {sq: '28 - Njëzet e tetë', en: 'Twenty-eight', de: 'Achtundzwanzig'},
+
+    {sq: '29 - Njëzet e nëntë', en: 'Twenty-nine', de: 'Neunundzwanzig'},
+
+    {sq: '30 - Tridhjetë', en: 'Thirty', de: 'Dreißig'},
+
+    {sq: '31 - Tridhjetë e një', en: 'Thirty-one', de: 'Einunddreißig'},
+
+    {sq: '32 - Tridhjetë e dy', en: 'Thirty-two', de: 'Zweiunddreißig'},
+
+    {sq: '33 - Tridhjetë e tre', en: 'Thirty-three', de: 'Dreiunddreißig'},
+
+    {sq: '34 - Tridhjetë e katër', en: 'Thirty-four', de: 'Vierunddreißig'},
+
+    {sq: '35 - Tridhjetë e pesë', en: 'Thirty-five', de: 'Fünfunddreißig'},
+
+    {sq: '36 - Tridhjetë e gjashtë', en: 'Thirty-six', de: 'Sechsunddreißig'},
+
+    {sq: '37 - Tridhjetë e shtatë', en: 'Thirty-seven', de: 'Siebenunddreißig'},
+
+    {sq: '38 - Tridhjetë e tetë', en: 'Thirty-eight', de: 'Achtunddreißig'},
+
+    {sq: '39 - Tridhjetë e nëntë', en: 'Thirty-nine', de: 'Neununddreißig'},
+
+    {sq: '40 - Dyzet', en: 'Forty', de: 'Vierzig'},
+
+    {sq: '41 - Dyzet e një', en: 'Forty-one', de: 'Einundvierzig'},
+
+    {sq: '42 - Dyzet e dy', en: 'Forty-two', de: 'Zweiundvierzig'},
+
+    {sq: '43 - Dyzet e tre', en: 'Forty-three', de: 'Dreiundvierzig'},
+
+    {sq: '44 - Dyzet e katër', en: 'Forty-four', de: 'Vierundvierzig'},
+
+    {sq: '45 - Dyzet e pesë', en: 'Forty-five', de: 'Fünfundvierzig'},
+
+    {sq: '46 - Dyzet e gjashtë', en: 'Forty-six', de: 'Sechsundvierzig'},
+
+    {sq: '47 - Dyzet e shtatë', en: 'Forty-seven', de: 'Siebenundvierzig'},
+
+    {sq: '48 - Dyzet e tetë', en: 'Forty-eight', de: 'Achtundvierzig'},
+
+    {sq: '49 - Dyzet e nëntë', en: 'Forty-nine', de: 'Neunundvierzig'},
+
+    {sq: '50 - Pesëdhjetë', en: 'Fifty', de: 'Fünfzig'},
+
+    {sq: '51 - Pesëdhjetë e një', en: 'Fifty-one', de: 'Einundfünfzig'},
+
+    {sq: '52 - Pesëdhjetë e dy', en: 'Fifty-two', de: 'Zweiundfünfzig'},
+
+    {sq: '53 - Pesëdhjetë e tre', en: 'Fifty-three', de: 'Dreiundfünfzig'},
+
+    {sq: '54 - Pesëdhjetë e katër', en: 'Fifty-four', de: 'Vierundfünfzig'},
+
+    {sq: '55 - Pesëdhjetë e pesë', en: 'Fifty-five', de: 'Fünfundfünfzig'},
+
+    {sq: '56 - Pesëdhjetë e gjashtë', en: 'Fifty-six', de: 'Sechsundfünfzig'},
+
+    {sq: '57 - Pesëdhjetë e shtatë', en: 'Fifty-seven', de: 'Siebenundfünfzig'},
+
+    {sq: '58 - Pesëdhjetë e tetë', en: 'Fifty-eight', de: 'Achtundfünfzig'},
+
+    {sq: '59 - Pesëdhjetë e nëntë', en: 'Fifty-nine', de: 'Neunundfünfzig'},
+
+    {sq: '60 - Gjashtëdhjetë', en: 'Sixty', de: 'Sechzig'},
+
+    {sq: '61 - Gjashtëdhjetë e një', en: 'Sixty-one', de: 'Einundsechzig'},
+
+    {sq: '62 - Gjashtëdhjetë e dy', en: 'Sixty-two', de: 'Zweiundsechzig'},
+
+    {sq: '63 - Gjashtëdhjetë e tre', en: 'Sixty-three', de: 'Dreiundsechzig'},
+
+    {sq: '64 - Gjashtëdhjetë e katër', en: 'Sixty-four', de: 'Vierundsechzig'},
+
+    {sq: '65 - Gjashtëdhjetë e pesë', en: 'Sixty-five', de: 'Fünfundsechzig'},
+
+    {sq: '66 - Gjashtëdhjetë e gjashtë', en: 'Sixty-six', de: 'Sechsundsechzig'},
+
+    {sq: '67 - Gjashtëdhjetë e shtatë', en: 'Sixty-seven', de: 'Siebenundsechzig'},
+
+    {sq: '68 - Gjashtëdhjetë e tetë', en: 'Sixty-eight', de: 'Achtundsechzig'},
+
+    {sq: '69 - Gjashtëdhjetë e nëntë', en: 'Sixty-nine', de: 'Neunundsechzig'},
+
+    {sq: '70 - Shtatëdhjetë', en: 'Seventy', de: 'Siebzig'},
+
+    {sq: '71 - Shtatëdhjetë e një', en: 'Seventy-one', de: 'Einundsiebzig'},
+
+    {sq: '72 - Shtatëdhjetë e dy', en: 'Seventy-two', de: 'Zweiundsiebzig'},
+
+    {sq: '73 - Shtatëdhjetë e tre', en: 'Seventy-three', de: 'Dreiundsiebzig'},
+
+    {sq: '74 - Shtatëdhjetë e katër', en: 'Seventy-four', de: 'Vierundsiebzig'},
+
+    {sq: '75 - Shtatëdhjetë e pesë', en: 'Seventy-five', de: 'Fünfundsiebzig'},
+
+    {sq: '76 - Shtatëdhjetë e gjashtë', en: 'Seventy-six', de: 'Sechsundsiebzig'},
+
+    {sq: '77 - Shtatëdhjetë e shtatë', en: 'Seventy-seven', de: 'Siebenundsiebzig'},
+
+    {sq: '78 - Shtatëdhjetë e tetë', en: 'Seventy-eight', de: 'Achtundsiebzig'},
+
+    {sq: '79 - Shtatëdhjetë e nëntë', en: 'Seventy-nine', de: 'Neunundsiebzig'},
+
+    {sq: '80 - Tetëdhjetë', en: 'Eighty', de: 'Achtzig'},
+
+    {sq: '81 - Tetëdhjetë e një', en: 'Eighty-one', de: 'Einundachtzig'},
+
+    {sq: '82 - Tetëdhjetë e dy', en: 'Eighty-two', de: 'Zweiundachtzig'},
+
+    {sq: '83 - Tetëdhjetë e tre', en: 'Eighty-three', de: 'Dreiundachtzig'},
+
+    {sq: '84 - Tetëdhjetë e katër', en: 'Eighty-four', de: 'Vierundachtzig'},
+
+    {sq: '85 - Tetëdhjetë e pesë', en: 'Eighty-five', de: 'Fünfundachtzig'},
+
+    {sq: '86 - Tetëdhjetë e gjashtë', en: 'Eighty-six', de: 'Sechsundachtzig'},
+
+    {sq: '87 - Tetëdhjetë e shtatë', en: 'Eighty-seven', de: 'Siebenundachtzig'},
+
+    {sq: '88 - Tetëdhjetë e tetë', en: 'Eighty-eight', de: 'Achtundachtzig'},
+
+    {sq: '89 - Tetëdhjetë e nëntë', en: 'Eighty-nine', de: 'Neunundachtzig'},
+
+    {sq: '90 - Nëntëdhjetë', en: 'Ninety', de: 'Neunzig'},
+
+    {sq: '91 - Nëntëdhjetë e një', en: 'Ninety-one', de: 'Einundneunzig'},
+
+    {sq: '92 - Nëntëdhjetë e dy', en: 'Ninety-two', de: 'Zweiundneunzig'},
+
+    {sq: '93 - Nëntëdhjetë e tre', en: 'Ninety-three', de: 'Dreiundneunzig'},
+
+    {sq: '94 - Nëntëdhjetë e katër', en: 'Ninety-four', de: 'Vierundneunzig'},
+
+    {sq: '95 - Nëntëdhjetë e pesë', en: 'Ninety-five', de: 'Fünfundneunzig'},
+
+    {sq: '96 - Nëntëdhjetë e gjashtë', en: 'Ninety-six', de: 'Sechsundneunzig'},
+
+    {sq: '97 - Nëntëdhjetë e shtatë', en: 'Ninety-seven', de: 'Siebenundneunzig'},
+
+    {sq: '98 - Nëntëdhjetë e tetë', en: 'Ninety-eight', de: 'Achtundneunzig'},
+
+    {sq: '99 - Nëntëdhjetë e nëntë', en: 'Ninety-nine', de: 'Neunundneunzig'},
+
+    {sq: '100 - Njëqind', en: 'One hundred', de: 'Hundert'}
+
+],
+
+            'Ngjyrat': [
+
+    {sq: 'Kuqe', en: 'Red', de: 'Rot'},
+
+    {sq: 'Kaltër', en: 'Blue', de: 'Blau'},
+
+    {sq: 'Verdhë', en: 'Yellow', de: 'Gelb'},
+
+    {sq: 'Gjelbër', en: 'Green', de: 'Grün'},
+
+    {sq: 'Bardhë', en: 'White', de: 'Weiß'},
+
+    {sq: 'Zezë', en: 'Black', de: 'Schwarz'},
+
+    {sq: 'Portokalli', en: 'Orange', de: 'Orange'},
+
+    {sq: 'Rozë', en: 'Pink', de: 'Rosa'},
+
+    {sq: 'Vjollcë', en: 'Purple', de: 'Lila'},
+
+    {sq: 'Hirtë (Gri)', en: 'Grey', de: 'Grau'},
+
+    {sq: 'Kafe', en: 'Brown', de: 'Braun'},
+
+    {sq: 'Artë', en: 'Gold', de: 'Gold'},
+
+    {sq: 'Argjendtë', en: 'Silver', de: 'Silber'}
+
+],
+
+             'Kafshët': [
+
+    {sq: 'Qen', en: 'Dog', de: 'Hund'},
+
+    {sq: 'Mace', en: 'Cat', de: 'Katze'},
+
+    {sq: 'Kalë', en: 'Horse', de: 'Pferd'},
+
+    {sq: 'Lopë', en: 'Cow', de: 'Kuh'},
+
+    {sq: 'Dele', en: 'Sheep', de: 'Schaf'},
+
+    {sq: 'Dhi', en: 'Goat', de: 'Ziege'},
+
+    {sq: 'Derr', en: 'Pig', de: 'Schwein'},
+
+    {sq: 'Gjel', en: 'Rooster', de: 'Hahn'},
+
+    {sq: 'Pulë', en: 'Chicken', de: 'Huhn'},
+
+    {sq: 'Lepur', en: 'Rabbit', de: 'Hase'},
+
+    {sq: 'Luan', en: 'Lion', de: 'Löwe'},
+
+    {sq: 'Tigër', en: 'Tiger', de: 'Tiger'},
+
+    {sq: 'Ari', en: 'Bear', de: 'Bär'},
+
+    {sq: 'Ujk', en: 'Wolf', de: 'Wolf'},
+
+    {sq: 'Dhelpër', en: 'Fox', de: 'Fuchs'},
+
+    {sq: 'Elefant', en: 'Elephant', de: 'Elefant'},
+
+    {sq: 'Majmun', en: 'Monkey', de: 'Affe'},
+
+    {sq: 'Gjirafë', en: 'Giraffe', de: 'Giraffe'},
+
+    {sq: 'Zog', en: 'Bird', de: 'Vogel'},
+
+    {sq: 'Peshk', en: 'Fish', de: 'Fisch'}
+
+],
+
+             'Frutat': [
+
+    {sq: 'Mollë', en: 'Apple', de: 'Apfel'},
+
+    {sq: 'Dardhë', en: 'Pear', de: 'Birne'},
+
+    {sq: 'Banane', en: 'Banana', de: 'Banane'},
+
+    {sq: 'Portokall', en: 'Orange', de: 'Orange'},
+
+    {sq: 'Luleshtrydhe', en: 'Strawberry', de: 'Erdbeere'},
+
+    {sq: 'Rrushi', en: 'Grape', de: 'Traube'},
+
+    {sq: 'Lemon', en: 'Lemon', de: 'Zitrone'},
+
+    {sq: 'Shalqini', en: 'Watermelon', de: 'Wassermelone'},
+
+    {sq: 'Pjeshkë', en: 'Peach', de: 'Pfirsich'},
+
+    {sq: 'Kumbull', en: 'Plum', de: 'Pflaume'},
+
+    {sq: 'Qershi', en: 'Cherry', de: 'Kirsche'},
+
+    {sq: 'Ananas', en: 'Ananas', de: 'Ananas'},
+
+    {sq: 'Kajsi', en: 'Apricot', de: 'Aprikose'},
+
+    {sq: 'Mjedër', en: 'Raspberry', de: 'Himbeere'},
+
+    {sq: 'Boronicë', en: 'Blueberry', de: 'Blaubeere'}
+
+],
+            'Perimet': [
+
+    {sq: 'Patate', en: 'Potato', de: 'Kartoffel'},
+
+    {sq: 'Domate', en: 'Tomato', de: 'Tomate'},
+
+    {sq: 'Spec', en: 'Pepper', de: 'Paprika'},
+
+    {sq: 'Qepë', en: 'Onion', de: 'Zwiebel'},
+
+    {sq: 'Hudhër', en: 'Garlic', de: 'Knoblauch'},
+
+    {sq: 'Karotë', en: 'Carrot', de: 'Karotte'},
+
+    {sq: 'Trangull', en: 'Cucumber', de: 'Gurke'},
+
+    {sq: 'lakër', en: 'Lettuce', de: 'Salat'},
+
+    {sq: 'Spinaq', en: 'Spinach', de: 'Spinat'},
+
+    {sq: 'Patëllxhan', en: 'Eggplant', de: 'Aubergine'},
+
+    {sq: 'Kungull', en: 'Pumpkin', de: 'Kürbis'},
+
+    {sq: 'Bizele', en: 'Peas', de: 'Erbsen'},
+
+    {sq: 'Fasule', en: 'Beans', de: 'Bohnen'},
+
+    {sq: 'Misër', en: 'Corn', de: 'Mais'}
+
+]
+        };
+
+        const myL = "{{ session['my_lang'] }}", learnL = "{{ session['learn_lang'] }}";
+
+        function show(c) {
+            document.getElementById('menu').style.display = 'none';
+            document.getElementById('home-btn').style.display = 'none'; // Fsheh butonin e Homepage
+            document.getElementById('details').style.display = 'block';
+            document.getElementById('title').innerText = c;
+            
+            const l = document.getElementById('list'); 
+            l.innerHTML = '';
+            
+            data[c].forEach(i => {
+                l.innerHTML += `
+                <div class="card">
+                    <div class="word-info">
+                        <small style="color:var(--text-dark); opacity:0.6;">${myL}:</small><br>
+                        <b>${i[myL]}</b><br><br>
+                        <small style="color:var(--primary);">${learnL}:</small><br>
+                        <b style="color:var(--primary); font-size:2.2rem;">${i[learnL]}</b>
+                    </div>
+                    <button class="speak-btn" onclick="speak('${i[learnL]}', '${learnL}')">🔊</button>
+                </div>`;
+            });
+            window.scrollTo(0,0);
+        }
+
+        function goBack() {
+            document.getElementById('menu').style.display = 'block';
+            document.getElementById('home-btn').style.display = 'flex'; // Shfaq përsëri butonin e Homepage
+            document.getElementById('details').style.display = 'none';
+        }
+
+        function speak(t, lang) {
+            window.speechSynthesis.cancel();
+            let m = new SpeechSynthesisUtterance(t);
+            m.lang = lang === 'de' ? 'de-DE' : (lang === 'en' ? 'en-US' : 'sq-AL');
+            window.speechSynthesis.speak(m);
+        }
+    </script>
+</body>
+</html>

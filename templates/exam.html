@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Provimi - Nivel {{ exam_id }}</title>
+    <style>
+        :root {
+            --primary: #4facfe;
+            --secondary: #00f2fe;
+            --glass: rgba(15, 23, 42, 0.9);
+            --border: rgba(255, 255, 255, 0.1);
+            --success: #00ff88;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Inter', -apple-system, sans-serif; 
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0f172a;
+            /* Sfondi me dritë që përshtatet me projektin */
+            background-image: radial-gradient(at 0% 0%, rgba(79, 172, 254, 0.15) 0px, transparent 50%);
+            padding: 15px;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .exam-container {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 30px;
+            width: 100%;
+            max-width: 700px; /* Pak më i gjerë për PC */
+            padding: 40px;
+            border: 1px solid var(--border);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+            text-align: center;
+            position: relative;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Progress Bar */
+        .progress-wrapper {
+            margin-bottom: 30px;
+        }
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            color: rgba(255,255,255,0.6);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            width: 0%;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 15px var(--primary);
+        }
+
+        /* Pyetja */
+        h2 { 
+            font-size: 1rem; 
+            color: var(--secondary); 
+            margin-bottom: 5px; 
+            letter-spacing: 2px;
+        }
+
+        #question-text { 
+            font-size: clamp(1.8rem, 5vw, 2.8rem); /* Madhësi dinamike e shkronjave */
+            font-weight: 900; 
+            margin-bottom: 30px;
+            background: linear-gradient(to bottom, #fff, #cbd5e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Audio Button */
+        .audio-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            font-size: 1.8rem;
+            cursor: pointer;
+            margin-bottom: 30px;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .audio-btn:hover {
+            background: rgba(79, 172, 254, 0.2);
+            transform: scale(1.1);
+            border-color: var(--primary);
+        }
+
+        /* Options Grid */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 2 kolona për PC/Laptop */
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .option-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            padding: 22px 15px;
+            border-radius: 18px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .option-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .option-btn:active { transform: scale(0.96); }
+
+        /* RESPONSIVE BREAKPOINTS */
+
+        /* Tablet (max-width: 768px) */
+        @media (max-width: 768px) {
+            .exam-container {
+                padding: 30px 20px;
+            }
+            #question-text { font-size: 2.2rem; }
+        }
+
+        /* Telefon (max-width: 480px) */
+        @media (max-width: 480px) {
+            .options-grid {
+                grid-template-columns: 1fr; /* 1 kolonë në telefon */
+            }
+            .exam-container {
+                padding: 25px 15px;
+                border-radius: 24px;
+            }
+            #question-text { font-size: 1.8rem; }
+            .audio-btn { width: 60px; height: 60px; font-size: 1.5rem; }
+            .option-btn { padding: 18px 10px; font-size: 1rem; }
+        }
+
+        /* Ekrane shumë të vogla */
+        @media (max-height: 600px) {
+            body { align-items: flex-start; }
+            .exam-container { margin-top: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="exam-container">
+        <div class="progress-wrapper">
+            <div class="progress-info">
+                <span>Përparimi</span>
+                <span>Pyetja <span id="current-q-num">1</span> nga <span id="total-q-num">0</span></span>
+            </div>
+            <div class="progress-container">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+
+        <h2>Përkthe fjalën:</h2>
+        <div id="question-text">...</div>
+
+        <button class="audio-btn" onclick="speakCurrent()" title="Dëgjo fjalën">🔊</button>
+
+        <div class="options-grid" id="options-grid">
+            </div>
+    </div>
+
+    <script>
+        const questions = {{ questions|tojson }};
+        let currentIdx = 0;
+        let score = 0;
+
+        document.getElementById('total-q-num').innerText = questions.length;
+
+        function loadQuestion() {
+            const q = questions[currentIdx];
+            document.getElementById('question-text').innerText = q.q;
+            document.getElementById('current-q-num').innerText = currentIdx + 1;
+            
+            // Progress Bar Animation
+            const progress = ((currentIdx) / questions.length) * 100;
+            document.getElementById('progress-fill').style.width = progress + "%";
+
+            const grid = document.getElementById('options-grid');
+            grid.innerHTML = '';
+
+            // Shpërndaj opsionet në mënyrë të rastësishme
+            const shuffledOptions = [...q.options].sort(() => Math.random() - 0.5);
+
+            shuffledOptions.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(opt, q.a);
+                grid.appendChild(btn);
+            });
+            
+            speak(q.q);
+        }
+
+        function checkAnswer(selected, correct) {
+            if (selected === correct) score++;
+            
+            currentIdx++;
+            if (currentIdx < questions.length) {
+                loadQuestion();
+            } else {
+                finishExam();
+            }
+        }
+
+        function speak(text) {
+            window.speechSynthesis.cancel();
+            const msg = new SpeechSynthesisUtterance(text);
+            msg.lang = "{{ session['learn_lang'] == 'de' and 'de-DE' or 'en-US' }}";
+            msg.rate = 0.8;
+            window.speechSynthesis.speak(msg);
+        }
+
+        function speakCurrent() {
+            speak(questions[currentIdx].q);
+        }
+
+        function finishExam() {
+            document.getElementById('progress-fill').style.width = "100%";
+            
+            fetch('/save_score', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    exam_id: "{{ exam_id }}",
+                    score: score
+                })
+            })
+            .then(() => {
+                const percent = Math.round((score / questions.length) * 100);
+                if(percent >= 50) {
+                    alert(`Bravo! ✅ Kalove me ${percent}% saktësi.`);
+                } else {
+                    alert(`Më dhimbet! ❌ Ke vetëm ${percent}%. Duhet të mësosh më shumë!`);
+                }
+                window.location.href = "/homepage";
+            });
+        }
+
+        // Fillo provimin
+        loadQuestion();
+    </script>
+</body>
+</html>

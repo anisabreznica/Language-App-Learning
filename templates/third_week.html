@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java 3 - Modern Learning</title>
+<style>
+:root {
+    --primary: #0062ff;        
+    --primary-glow: rgba(0, 98, 255, 0.4);
+    --text-dark: #0f172a;      
+    --radius: 30px;            
+    --glass: rgba(255, 255, 255, 0.85); 
+}
+
+/* 1. BACKGROUNDI DHE STRUKTURA */
+body {
+    font-family: 'SF Pro Display', -apple-system, system-ui, sans-serif;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #0f172a;
+    background-image: 
+        radial-gradient(at 0% 0%, #1e293b 0px, transparent 50%),
+        radial-gradient(at 100% 0%, #002d72 0px, transparent 50%),
+        radial-gradient(at 100% 100%, #1e1b4b 0px, transparent 50%),
+        radial-gradient(at 0% 100%, #004085 0px, transparent 50%);
+    background-attachment: fixed;
+    color: var(--text-dark);
+}
+
+.container {
+    width: 95%;
+    max-width: 1400px;
+    margin-top: 80px; /* Hapësirë për butonin fiks */
+}
+
+/* 2. BACK BUTTON (I NJËJTË PËR TË GJITHA) */
+.back-btn, .back-link, #home-btn {
+    position: fixed;
+    top: 25px;
+    left: 25px;
+    z-index: 9999;
+    background: var(--glass) !important;
+    backdrop-filter: blur(15px) !important;
+    -webkit-backdrop-filter: blur(15px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.5) !important;
+    padding: 12px 24px !important;
+    border-radius: 18px !important;
+    color: var(--text-dark) !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3) !important;
+    transition: 0.3s all ease !important;
+    font-size: 0.95rem !important;
+}
+
+.back-btn:hover {
+    transform: translateX(5px);
+    background: var(--primary) !important;
+    color: white !important;
+}
+
+/* 3. HEADER DHE TITUJT */
+.header { text-align: center; margin-bottom: 50px; }
+.header h1 {
+    font-size: 3.5rem;
+    font-weight: 900;
+    letter-spacing: -2px;
+    color: white;
+    text-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    margin: 0;
+}
+
+/* 4. GRIDI I KATEGORIVE (3 KOLONA) */
+.grid, .grid-menu {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 30px !important;
+    width: 100%;
+}
+
+.box, .menu-card {
+    background: var(--glass) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    min-height: 280px;
+    border-radius: var(--radius) !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px !important;
+    font-size: 1.8rem !important;
+    font-weight: 800 !important;
+    color: var(--text-dark) !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2) !important;
+    transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    cursor: pointer;
+}
+
+.box:hover, .menu-card:hover {
+    transform: translateY(-15px) scale(1.02);
+    background: var(--primary) !important;
+    color: white !important;
+    box-shadow: 0 30px 60px var(--primary-glow) !important;
+}
+
+/* 5. GRIDI I FJALËVE (2 KOLONA) */
+#list, #items-list, .word-list {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 25px !important;
+    width: 100%;
+}
+
+.card, .word-card {
+    background: var(--glass) !important;
+    backdrop-filter: blur(15px) !important;
+    padding: 35px !important;
+    border-radius: var(--radius) !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important;
+}
+
+.word-info b, .word-text {
+    font-size: 1.8rem;
+    font-weight: 900;
+}
+
+/* 6. BUTONI I ZËRIT (SPEAK) */
+.speak-btn, button[onclick^="speak"], button[onclick^="shqipto"] {
+    background: var(--primary) !important;
+    color: white !important;
+    border: none !important;
+    width: 75px !important;
+    height: 75px !important;
+    border-radius: 50% !important;
+    cursor: pointer !important;
+    font-size: 28px !important;
+    box-shadow: 0 10px 20px var(--primary-glow) !important;
+    transition: 0.3s ease !important;
+}
+
+.speak-btn:hover { transform: scale(1.1) rotate(5deg); }
+
+/* 7. RESPONSIVE (PËR TELEFON) */
+@media (max-width: 1100px) {
+    .grid, .grid-menu { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+@media (max-width: 700px) {
+    .grid, .grid-menu, #list, #items-list { grid-template-columns: 1fr !important; }
+    .header h1 { font-size: 2.5rem; }
+    .box, .menu-card { min-height: 180px; font-size: 1.5rem !important; }
+    .back-btn { padding: 10px 18px !important; font-size: 0.85rem !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div id="menu-view">
+        <a href="/homepage" class="back-btn">← Kthehu te Fillimi</a>
+        <div class="header">
+            <h1>Java 3 📍</h1>
+            <p style="color: white; opacity: 0.8;">Vende, Profesione dhe Emocione</p>
+        </div>
+        <div class="grid-menu" id="menu-grid"></div>
+    </div>
+
+    <div id="details-view" style="display:none;">
+        <button class="back-btn" onclick="shfaqMenune()">← Mbrapa te Kategoritë</button>
+        <div class="header">
+            <h2 id="cat-title" style="font-size: 3.5rem; color: white;"></h2>
+        </div>
+        <div class="word-list" id="words-list"></div>
+    </div>
+</div>
+
+<script>
+// Logjika JS mbetet e njëjtë si e ke pasur...
+const learnL = localStorage.getItem('learnLang') || 'en';
+
+const data = {
+    'Places': [
+        {sq: 'Aeroporti', en: 'Airport', de: 'Flughafen'},
+        {sq: 'Spitali', en: 'Hospital', de: 'Krankenhaus'},
+        {sq: 'Farmacia', en: 'Pharmacy', de: 'Apotheke'},
+        {sq: 'Banka', en: 'Bank', de: 'Bank'},
+        {sq: 'Dyqani', en: 'Shop', de: 'Laden'},
+        {sq: 'Restoranti', en: 'Restaurant', de: 'Restaurant'}
+    ],
+    'People & Body': [
+        {sq: 'Fëmija', en: 'Child', de: 'Kind'},
+        {sq: 'Miku', en: 'Friend', de: 'Freund'},
+        {sq: 'Koka', en: 'Head', de: 'Kopf'},
+        {sq: 'Dora', en: 'Hand', de: 'Hand'},
+        {sq: 'Këmba', en: 'Leg', de: 'Bein'},
+        {sq: 'Zemra', en: 'Heart', de: 'Herz'}
+    ],
+    'Professions': [
+        {sq: 'Mjeku', en: 'Doctor', de: 'Arzt'},
+        {sq: 'Mësuesi', en: 'Teacher', de: 'Lehrer'},
+        {sq: 'Polici', en: 'Policeman', de: 'Polizist'},
+        {sq: 'Inxhinieri', en: 'Engineer', de: 'Ingenieur'},
+        {sq: 'Shoferi', en: 'Driver', de: 'Fahrer'}
+    ],
+    'Clothing': [
+        {sq: 'Këmisha', en: 'Shirt', de: 'Hemd'},
+        {sq: 'Pantallonat', en: 'Pants', de: 'Hose'},
+        {sq: 'Fustani', en: 'Dress', de: 'Kleid'},
+        {sq: 'Këpucët', en: 'Shoes', de: 'Schuhe'}
+    ],
+    'Emotions': [
+        {sq: 'I lumtur', en: 'Happy', de: 'Glücklich'},
+        {sq: 'I trishtuar', en: 'Sad', de: 'Traurig'},
+        {sq: 'I zemëruar', en: 'Angry', de: 'Wütend'},
+        {sq: 'I lodhur', en: 'Tired', de: 'Müde'}
+    ],
+    'Sports': [
+        {sq: 'Futboll', en: 'Football', de: 'Fußball'},
+        {sq: 'Boks', en: 'Boxing', de: 'Boxen'},
+        {sq: 'Not', en: 'Swimming', de: 'Schwimmen'}
+    ]
+};
+
+function start() {
+    const grid = document.getElementById('menu-grid');
+    grid.innerHTML = '';
+    Object.keys(data).forEach(cat => {
+        const div = document.createElement('div');
+        div.className = 'menu-card';
+        div.innerHTML = `<h3 style="font-size:2.2rem; font-weight:900;">${cat}</h3>`;
+        div.onclick = () => shfaqKategorine(cat);
+        grid.appendChild(div);
+    });
+}
+
+function shfaqKategorine(cat) {
+    document.getElementById('menu-view').style.display = 'none';
+    document.getElementById('details-view').style.display = 'block';
+    document.getElementById('cat-title').innerText = cat;
+    const list = document.getElementById('words-list');
+    list.innerHTML = '';
+
+    data[cat].forEach(item => {
+        const word = item[learnL];
+        const lang = learnL === 'en' ? 'en-US' : 'de-DE';
+        list.innerHTML += `
+            <div class="word-card">
+                <div class="word-info">
+                    <div style="opacity:0.6; font-weight:700;">SQ: ${item.sq}</div>
+                    <div class="learn-label">${word}</div>
+                </div>
+                <button class="speak-btn" onclick="shqipto('${word.replace(/'/g, "\\'")}', '${lang}')">🔊</button>
+            </div>`;
+    });
+    window.scrollTo(0,0);
+}
+
+function shfaqMenune() {
+    document.getElementById('menu-view').style.display = 'block';
+    document.getElementById('details-view').style.display = 'none';
+}
+
+function shqipto(t, l) {
+    window.speechSynthesis.cancel();
+    const m = new SpeechSynthesisUtterance(t);
+    m.lang = l;
+    window.speechSynthesis.speak(m);
+}
+
+start();
+</script>
+</body>
+</html>

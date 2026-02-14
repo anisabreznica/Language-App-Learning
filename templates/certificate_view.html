@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certifikata Zyrtare - {{ user.emri }}</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Great+Vibes&family=Montserrat:wght@300;400;700&display=swap');
+
+        body { 
+            background: #1a1a1a; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            margin: 0; 
+            padding: 40px 20px; 
+            min-height: 100vh;
+            overflow-x: hidden; /* Ndalon levizjen anash ne telefon */
+        }
+
+        /* CONTAINER I CERTIFIKATËS */
+        .certificate {
+            width: 297mm;
+            height: 210mm;
+            background: #fff;
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 80%),
+                url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+            padding: 60px;
+            border: 20px solid #2c3e50;
+            outline: 5px solid #d4af37; /* Korniza e arit */
+            outline-offset: -15px;
+            box-shadow: 0 0 100px rgba(0,0,0,0.5);
+            text-align: center;
+            position: relative;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transform-origin: top center; /* E rendesishme per zvogelimin ne telefon */
+        }
+
+        /* ELEMENTET DEKORATIVE */
+        .corner-decor {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border: 4px solid #d4af37;
+        }
+        .top-left { top: 30px; left: 30px; border-right: none; border-bottom: none; }
+        .top-right { top: 30px; right: 30px; border-left: none; border-bottom: none; }
+        .bottom-left { bottom: 30px; left: 30px; border-right: none; border-top: none; }
+        .bottom-right { bottom: 30px; right: 30px; border-left: none; border-top: none; }
+
+        .header-title { 
+            font-family: 'Cinzel', serif;
+            font-size: 65px; 
+            color: #2c3e50; 
+            margin: 0; 
+            letter-spacing: 12px;
+            font-weight: 700;
+        }
+
+        .separator {
+            width: 60%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #d4af37, transparent);
+            margin: 10px auto;
+        }
+
+        .sub-header { 
+            font-family: 'Montserrat', sans-serif;
+            font-size: 20px; 
+            color: #7f8c8d; 
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 30px;
+        }
+
+        .awarded-text { 
+            font-family: 'Montserrat', sans-serif;
+            font-size: 22px; 
+            color: #333;
+        }
+        
+        .student-name { 
+            font-family: 'Great Vibes', cursive;
+            font-size: 85px; 
+            color: #d4af37; 
+            margin: 15px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .description { 
+            font-family: 'Montserrat', sans-serif;
+            font-size: 19px; 
+            line-height: 1.8; 
+            color: #444; 
+            max-width: 850px; 
+            margin: 0 auto;
+        }
+
+        .final-score { 
+            font-family: 'Cinzel', serif;
+            font-size: 28px; 
+            color: #27ae60; 
+            font-weight: bold; 
+            margin: 25px 0;
+            padding: 10px 30px;
+            border: 1px solid #eee;
+            display: inline-block;
+            border-radius: 50px;
+        }
+
+        .footer-section { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-end;
+            padding: 0 40px;
+        }
+
+        .info-block {
+            text-align: left;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 15px;
+            color: #2c3e50;
+        }
+
+        .signature-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 250px;
+        }
+
+        .stamp {
+            width: 130px;
+            height: 130px;
+            position: absolute;
+            bottom: 70px;
+            right: 120px;
+            opacity: 0.85;
+            transform: rotate(-15deg);
+        }
+
+        .signature-line {
+            border-top: 2px solid #2c3e50;
+            width: 100%;
+            margin-top: 10px;
+            padding-top: 5px;
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* BUTONAT */
+        .action-buttons { 
+            margin-top: 40px; 
+            display: flex; 
+            gap: 20px;
+            z-index: 100;
+        }
+
+        .btn { 
+            padding: 18px 40px; 
+            font-size: 15px; 
+            cursor: pointer; 
+            border: none; 
+            border-radius: 50px; 
+            font-weight: 700; 
+            transition: 0.4s;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 1px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-download { background: #d4af37; color: white; }
+        .btn-home { background: #2c3e50; color: white; }
+
+        .btn:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+            filter: brightness(1.1);
+        }
+
+        /* MEDIA QUERIES & PRINT */
+        @media print {
+            @page { size: A4 landscape; margin: 0; }
+            body { background: white; padding: 0; }
+            .action-buttons { display: none !important; }
+            .certificate { 
+                box-shadow: none; 
+                border: 15px solid #2c3e50;
+                width: 100%;
+                height: 100vh;
+                transform: scale(1) !important;
+                margin: 0 !important;
+            }
+        }
+
+        /* Rregullimi per Laptop */
+        @media (max-width: 1200px) {
+            .certificate { transform: scale(0.6); margin-top: -150px; }
+            .action-buttons { margin-top: -100px; }
+        }
+
+        /* Rregullimi per Telefon */
+        @media (max-width: 600px) {
+            .certificate { 
+                transform: scale(0.32); 
+                margin-top: 20px;
+            }
+            .action-buttons { 
+                flex-direction: column; 
+                margin-top: -280px; 
+                gap: 10px;
+                width: 90%;
+            }
+            .btn {
+                width: 100%;
+                text-align: center;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="certificate">
+        <div class="corner-decor top-left"></div>
+        <div class="corner-decor top-right"></div>
+        <div class="corner-decor bottom-left"></div>
+        <div class="corner-decor bottom-right"></div>
+
+        <header>
+            <h1 class="header-title">
+                {% if session['learn_lang'] == 'sq' %} Certifikatë
+                {% elif session['learn_lang'] == 'de' %} Zertifikat
+                {% else %} Certificate {% endif %}
+            </h1>
+            <div class="separator"></div>
+            <div class="sub-header">
+                {% if session['learn_lang'] == 'sq' %} Akademia e Gjuhëve të Huaja
+                {% elif session['learn_lang'] == 'de' %} Akademie für Fremdsprachen
+                {% else %} Foreign Language Academy {% endif %}
+            </div>
+        </header>
+
+        <main>
+            <p class="awarded-text">
+                {% if session['learn_lang'] == 'sq' %} Kjo certifikatë i jepet me meritë të plotë:
+                {% elif session['learn_lang'] == 'de' %} Dieses Zertifikat wird mit vollem Verdienst verliehen an:
+                {% else %} This certificate is awarded with full merit to: {% endif %}
+            </p>
+            <div class="student-name">{{ user.emri }} {{ user.mbiemri }}</div>
+            
+            <p class="description">
+                {% if session['learn_lang'] == 'sq' %}
+                    Për tregimin e një vullneti të lartë dhe për suksese të jashtëzakonshme në përfundimin 
+                    e ciklit të plotë të studimeve gjuhësore. Ky certifikim dëshmon aftësitë e fituara 
+                    në komunikim, gramatikë dhe leksik të gjuhës Shqipe.
+                {% elif session['learn_lang'] == 'de' %}
+                    Für das Zeigen eines hohen Willens und außergewöhnliche Erfolge beim Abschluss 
+                    des vollständigen Zyklus der Sprachstudien. Diese Zertifizierung belegt die erworbenen 
+                    Fähigkeiten in Kommunikation, Grammatik und Lexikon der deutschen Sprache.
+                {% else %}
+                    For demonstrating high will and exceptional success in completing 
+                    the full cycle of language studies. This certification attests to the acquired 
+                    skills in communication, grammar, and vocabulary of the English language.
+                {% endif %}
+            </p>
+            
+            <div class="final-score">
+                {% if session['learn_lang'] == 'sq' %} Saktësia Totale:
+                {% elif session['learn_lang'] == 'de' %} Gesamtgenauigkeit:
+                {% else %} Total Accuracy: {% endif %} {{ user.percent }}
+            </div>
+        </main>
+
+        <div class="footer-section">
+            <div class="info-block">
+                <strong>
+                    {% if session['learn_lang'] == 'sq' %} Data e Lindjes:
+                    {% elif session['learn_lang'] == 'de' %} Geburtsdatum:
+                    {% else %} Date of Birth: {% endif %}
+                </strong> {{ user.datelindja }}<br>
+                
+                <strong>
+                    {% if session['learn_lang'] == 'sq' %} ID e Certifikatës:
+                    {% elif session['learn_lang'] == 'de' %} Zertifikats-ID:
+                    {% else %} Certificate ID: {% endif %}
+                </strong> #LL-2026-{{ range(1000, 9999) | random }}<br>
+                
+                <strong>
+                    {% if session['learn_lang'] == 'sq' %} Data e Lëshimit:
+                    {% elif session['learn_lang'] == 'de' %} Ausstellungsdatum:
+                    {% else %} Date of Issue: {% endif %}
+                </strong> {{ user.data_sot }}
+            </div>
+
+            <div class="signature-area">
+                <img src="{{ url_for('static', filename='vula.jpg') }}" alt="Vula" class="stamp">
+                <div class="signature-line">
+                    {% if session['learn_lang'] == 'sq' %} DREJTORI I AKADEMISË
+                    {% elif session['learn_lang'] == 'de' %} DIREKTOR DER AKADEMIE
+                    {% else %} ACADEMY DIRECTOR {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="action-buttons">
+        <button class="btn btn-download" onclick="window.print()">
+            {% if session['learn_lang'] == 'sq' %} RUJE SI PDF / PRINTO
+            {% elif session['learn_lang'] == 'de' %} ALS PDF SPEICHERN / DRUCKEN
+            {% else %} SAVE AS PDF / PRINT {% endif %}
+        </button>
+        <a href="/homepage" class="btn btn-home">
+            {% if session['learn_lang'] == 'sq' %} KTHEHU NË DASHBOARD
+            {% elif session['learn_lang'] == 'de' %} ZURÜCK ZUM DASHBOARD
+            {% else %} BACK TO DASHBOARD {% endif %}
+        </a>
+    </div>
+
+</body>
+</html>
