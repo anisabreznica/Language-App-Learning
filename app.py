@@ -126,36 +126,29 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     message = None
-
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
 
         conn = get_db_connection()
         cursor = conn.cursor()
-
-        cursor.execute(
-            "SELECT * FROM users WHERE username=%s AND password=%s",
-            (username, password)
-        )
-
+        cursor.execute("SELECT * FROM users WHERE username=%s AND password=%s", (username, password))
         user = cursor.fetchone()
         cursor.close()
         conn.close()
 
         if user:
-            session['user_id'] = user['id']
-            session['username'] = user['username']
+            # Këtu po e ruajmë me emrin 'username'
+            session['username'] = user['username'] 
             return redirect(url_for('index'))
         else:
             message = "Username ose password gabim ❌"
-
     return render_template('login.html', message=message)
-
 
 @app.route('/index')
 def index():
-    if 'user_id' not in session:
+    # DUHET TË JETË 'username', jo 'user_id'
+    if 'username' not in session: 
         return redirect(url_for('login'))
     return render_template('index.html')
 
